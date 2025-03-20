@@ -5,24 +5,30 @@ function getAudioDuration($filePath) {
     exec($command, $output, $returnVar);
 
     if ($returnVar !== 0 || empty($output)) {
-        return false;
+        return [false, null]; 
     }
 
-    return (float)$output[0];
+    return [true, (float)$output[0]];
 }
 
 function calculateAudioDuration($filePath, $secondsToSubtract) {
     if (!file_exists($filePath)) {
-        throw new Exception("ошибка: файл не найден '$filePath'");
+        return [false, "ошибка: файл не найден '$filePath'", null];
     }
 
-    $duration = getAudioDuration($filePath);
-    if ($duration === false) {
-        throw new Exception("ошибка: не удалось получить длину аудиофайла");
+    list($success, $duration) = getAudioDuration($filePath);
+    if (!$success) {
+        return [false, "ошибка: не удалось получить длину аудиофайла", null];
     }
 
-    $result = $duration - (float)$secondsToSubtract;
-    return max(0, $result);
+    $secondsToSubtract = (float)$secondsToSubtract;
+    
+    if ($secondsToSubtract > $duration) {
+        return [false, "ошибка: вычитаемое время больше длительности аудио", null];
+    }
+
+    $result = $duration - $secondsToSubtract;
+    return [true, null, $result];
 }
 
 ?>
