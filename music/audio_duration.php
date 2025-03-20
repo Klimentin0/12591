@@ -1,6 +1,23 @@
 <?php
 
+
+function isSoxInstalled() {
+    // Проверка установки через проверки на версию в командной строке. Опять же под линукс.
+    exec("sox --version 2>&1", $output, $returnVar);
+
+    // Если 0, sox установлен.
+    return $returnVar === 0;
+}
+
 function getAudioDuration($filePath) {
+    if (!isSoxInstalled()) {
+        return [
+            'success' => false,
+            'error' => 'Ошибка: утилита sox не установлена',
+            'time' => null
+        ];
+    } 
+
     $command = "soxi -D " . escapeshellarg($filePath);
     exec($command, $output, $returnVar);
 
@@ -21,10 +38,17 @@ function getAudioDuration($filePath) {
 }
 
 function calculateAudioDuration($filePath, $secondsToSubtract) {
+    if (!isSoxInstalled()) {
+        return [
+            'success' => false,
+            'error' => 'Ошибка: утилита sox не установлена',
+            'time' => null
+        ];
+    }
     if (!file_exists($filePath)) {
         return [
             'success' => false,
-            'error' => "ошибка: файл не найден '$filePath'",
+            'error' => "файл не найден '$filePath'",
             'time' => null
         ];
     }
