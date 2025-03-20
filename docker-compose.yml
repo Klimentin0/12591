@@ -1,0 +1,9 @@
+services:
+  sox-container:
+    build:
+      context: .
+    container_name: sox-app
+    volumes:
+      - ./music:/app
+    tty: true
+    stdin_open: true
