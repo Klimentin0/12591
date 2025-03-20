@@ -1,5 +1,6 @@
 <?php
 require_once 'audio_duration.php';
+
 echo "Аудио обработчик\n";
 echo "----------------\n";
 
@@ -12,6 +13,13 @@ do {
     }
 } while (!file_exists($filePath));
 
+$originalDurResult = getAudioDuration($filePath);
+if (!$originalDurResult[0]) {
+    echo "Ошибка: не удалось получить длительность аудиофайла.\n";
+    exit(1);
+}
+$originalDuration = $originalDurResult[1];
+
 do {
     echo "Введите количество секунд для вычитания: ";
     $secondsInput = trim(fgets(STDIN));
@@ -21,22 +29,16 @@ do {
     }
 } while (!is_numeric($secondsInput));
 
-try {
-    $result = calculateAudioDuration($filePath, $secondsInput);
-    
-    echo "\nРезультат обработки:\n";
-    echo "Исходная длительность: " . getAudioDuration($filePath) . " сек\n";
-    echo "Вычитаемое время: " . $secondsInput . " сек\n";
-    
-    if ($result === 0 && $secondsInput > 0) {
-        echo "Итоговая длительность: 0 секунд (Число для вычетания больше самого файла)\n";
-    } else {
-        echo "Итоговая длительность: " . number_format($result, 2) . " сек\n";
-    }
-    
-} catch (Exception $e) {
-    echo "Критическая ошибка: " . $e->getMessage() . "\n";
+$result = calculateAudioDuration($filePath, $secondsInput);
+
+echo "\nРезультат обработки:\n";
+echo "Исходная длительность: " . number_format($originalDuration, 2) . " сек\n";
+echo "Вычитаемое время: " . number_format((float)$secondsInput, 2) . " сек\n";
+
+if (!$result[0]) {
+    echo "Ошибка: " . $result[1] . "\n";
     exit(1);
 }
 
+echo "Итоговая длительность: " . number_format($result[2], 2) . " сек\n";
 exit(0);
