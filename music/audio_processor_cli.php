@@ -14,11 +14,11 @@ do {
 } while (!file_exists($filePath));
 
 $originalDurResult = getAudioDuration($filePath);
-if (!$originalDurResult[0]) {
-    echo "Ошибка: не удалось получить длительность аудиофайла.\n";
+if (!$originalDurResult['success']) {
+    echo "Ошибка: " . $originalDurResult['error'] . "\n";
     exit(1);
 }
-$originalDuration = $originalDurResult[1];
+$originalDuration = $originalDurResult['time'];
 
 do {
     echo "Введите количество секунд для вычитания: ";
@@ -35,10 +35,10 @@ echo "\nРезультат обработки:\n";
 echo "Исходная длительность: " . number_format($originalDuration, 2) . " сек\n";
 echo "Вычитаемое время: " . number_format((float)$secondsInput, 2) . " сек\n";
 
-if (!$result[0]) {
-    echo "Ошибка: " . $result[1] . "\n";
+if (!$result['success']) {
+    echo "Ошибка: " . $result['error'] . "\n";
     exit(1);
 }
 
-echo "Итоговая длительность: " . number_format($result[2], 2) . " сек\n";
+echo "Итоговая длительность: " . number_format($result['time'], 2) . " сек\n";
 exit(0);
