@@ -13,7 +13,7 @@ function getAudioDuration($filePath) {
     if (!isSoxInstalled()) {
         return [
             'success' => false,
-            'error' => 'Ошибка: утилита sox не установлена',
+            'error' => 'Утилита sox не установлена',
             'time' => null
         ];
     } 
@@ -24,7 +24,7 @@ function getAudioDuration($filePath) {
     if ($returnVar !== 0 || empty($output)) {
         return [
             'success' => false,
-            'error' => 'Ошибка получения длины аудиофайла',
+            'error' => 'Не удалось получить длину аудиофайла',
             'time' => null
         ];
     }
@@ -41,14 +41,14 @@ function calculateAudioDuration($filePath, $secondsToSubtract) {
     if (!isSoxInstalled()) {
         return [
             'success' => false,
-            'error' => 'Ошибка: утилита sox не установлена',
+            'error' => 'Утилита sox не установлена',
             'time' => null
         ];
     }
     if (!file_exists($filePath)) {
         return [
             'success' => false,
-            'error' => "файл не найден '$filePath'",
+            'error' => "Файл не найден '$filePath'",
             'time' => null
         ];
     }
@@ -57,7 +57,7 @@ function calculateAudioDuration($filePath, $secondsToSubtract) {
     if (!$durationResult['success']) {
         return [
             'success' => false,
-            'error' => "ошибка: не удалось получить длину аудиофайла",
+            'error' => "Не удалось получить длину аудиофайла",
             'time' => null
         ];
     }
@@ -71,7 +71,7 @@ function calculateAudioDuration($filePath, $secondsToSubtract) {
     if ($secondsToSubtract > $duration) {
         return [
             'success' => false,
-            'error' => "ошибка: вычитаемое время больше длительности аудио",
+            'error' => "Вычитаемое время больше длительности аудио",
             'time' => null
         ];
     }
