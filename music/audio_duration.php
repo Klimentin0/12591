@@ -12,10 +12,11 @@ function getAudioDuration($filePath) {
         ];
     }
 
+    // Округляем длительность аудио вверх до ближайшего большего целого числа
     return [
         'success' => true,
         'error' => null,
-        'time' => (float)$output[0]
+        'time' => (int)ceil((float)$output[0])
     ];
 }
 
@@ -37,9 +38,12 @@ function calculateAudioDuration($filePath, $secondsToSubtract) {
         ];
     }
 
+    // Получаем округленную вверх длительность аудио
     $duration = $durationResult['time'];
-    $secondsToSubtract = (float)$secondsToSubtract;
-    
+
+    // Округляем вычитаемое время вверх до ближайшего большего целого числа
+    $secondsToSubtract = (int)ceil((float)$secondsToSubtract);
+
     if ($secondsToSubtract > $duration) {
         return [
             'success' => false,
@@ -48,6 +52,7 @@ function calculateAudioDuration($filePath, $secondsToSubtract) {
         ];
     }
 
+    // Возвращаем результат с округлением вверх
     return [
         'success' => true,
         'error' => null,
